@@ -1,0 +1,27 @@
+Horses B-ANIMAL
+are O
+too O
+tall O
+and O
+they O
+pretend O
+to O
+care O
+about O
+your O
+feelings O
+
+Who O
+is O
+Shaka B-PERSON
+Khan I-PERSON
+? O
+
+I O
+like O
+London B-LOCATION
+and O
+Berlin B-LOCATION
+. O
+
+
