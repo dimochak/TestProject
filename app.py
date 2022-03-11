@@ -75,35 +75,38 @@ def evaluate_custom_model(text):
 train_custom_flair_model()
 
 
-@app.route('/')
-def my_form():
-    return render_template('my-form.html')
+# @app.route('/')
+# def my_form():
+#     return render_template('my-form.html')
 
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['GET', 'POST'])
 def analyzeNER():
-    message = request.form['text']
+    if request.method == 'POST':
+        message = request.form['text']
 
-    # 1. Flair NER
-    sentence_flair = Sentence(message)
-    tagger.predict(sentence_flair)
+        # 1. Flair NER
+        sentence_flair = Sentence(message)
+        tagger.predict(sentence_flair)
 
-    # 2. SpaCy NER
-    entities = nlp(message)
+        # 2. SpaCy NER
+        entities = nlp(message)
 
-    spacy_dict = {}
-    for ent in entities.ents:
-        spacy_dict[ent.text] = ent.label_
+        spacy_dict = {}
+        for ent in entities.ents:
+            spacy_dict[ent.text] = ent.label_
 
-    # 3. Custom entity recognition, using Flair embeddings
-    custom_sentence_result = evaluate_custom_model(message)
+        # 3. Custom entity recognition, using Flair embeddings
+        custom_sentence_result = evaluate_custom_model(message)
 
-    response = {'result_flair': sentence_flair.to_tagged_string(),
-                'result_spacy': spacy_dict,
-                'result_custom': custom_sentence_result
-                }
-    return jsonify(response), 200
-
+        response = {'result_flair': sentence_flair.to_tagged_string(),
+                    'result_spacy': spacy_dict,
+                    'result_custom': custom_sentence_result
+                    }
+        # return jsonify(response), 200
+        return render_template('my-form.html', sample_output=response)
+    else:
+        return render_template('my-form.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
